@@ -46,14 +46,14 @@
 		<table style="width: 100%">
 			<tr>
 				<th></th>
+				<th></th>
 				<th>Movie Name</th>
 				<th>Release Date</th>
 				<th>Language</th>
 			</tr>
 			<c:forEach items="${movies}" var="movies">
-
 				<tr>
-					<td><button class ="add_to_watch"/></button></td>
+					<td align="center"><button class ="add_to_watch"/></button></td>
 					<td align="center"><img
 						src="https://image.tmdb.org/t/p/original${movies.logoPath}"
 						style="width: 150px; height: 200px;" /></td>
