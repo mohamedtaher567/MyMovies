@@ -25,12 +25,11 @@ public class APIConnector {
 	}
 	
 	public Movie[] listMovies(int page) throws UnirestException {
-		String url = DISCOVER_MOVIES_URL;
-		HttpResponse<JsonNode> response = Unirest.get(url)
+		JSONObject response = Unirest.get(DISCOVER_MOVIES_URL)
 		  .queryString("api_key", API_KEY)
 		  .queryString("page", page)
-		  .asJson();
-		JSONArray moviesJsonArray =  (JSONArray) response.getBody().getObject().get("results");
+		  .asJson().getBody().getObject();
+		JSONArray moviesJsonArray =  (JSONArray) response.get("results");
 		Movie[] movies = new Movie[moviesJsonArray.length()];
 		for(int i=0; i<moviesJsonArray.length(); i++) {
 			movies[i] = createMovieObjectFromJson(((JSONObject) moviesJsonArray.get(i)));

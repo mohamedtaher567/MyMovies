@@ -43,6 +43,7 @@
 	</div>
 
 	<div class="container" style="overflow-x: auto;">
+		<a href="${pageNumber-1}">Previous</a> <a href="${pageNumber+1}">Next</a>
 		<table style="width: 100%">
 			<tr>
 				<th></th>
