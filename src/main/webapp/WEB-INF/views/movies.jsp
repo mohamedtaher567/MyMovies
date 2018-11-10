@@ -21,13 +21,12 @@
 
 	<nav class="navbar navbar-inverse">
 		<div class="container">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Spring Boot</a>
-			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
+					<li class="active"><a class="navbar-brand" href="watched">Watched
+							movies</a></li>
+					<li><a class="navbar-brand" href="want_to_watch">Want to
+							watch movies</a></li>
 				</ul>
 			</div>
 		</div>
@@ -43,10 +42,16 @@
 	</div>
 
 	<div class="container" style="overflow-x: auto;">
-		<a href="${pageNumber-1}">Previous</a> <a href="${pageNumber+1}">Next</a>
+		<c:if test="${pageNumber != null}">
+			<a href="${pageNumber-1}">Previous</a>
+			<a href="${pageNumber+1}">Next</a>
+		</c:if>
+
 		<table style="width: 100%">
 			<tr>
-				<th></th>
+				<c:if test="${pageNumber == null}">
+					<th></th>
+				</c:if>
 				<th></th>
 				<th>Movie Name</th>
 				<th>Release Date</th>
@@ -54,7 +59,22 @@
 			</tr>
 			<c:forEach items="${movies}" var="movies">
 				<tr>
-					<td align="center"><button class ="add_to_watch"/></button></td>
+					<td align="center"><c:choose>
+							<c:when test="${pageNumber == null}">
+								<c:choose>
+									<c:when test="${wantToWatch}">
+										<button id="${movies.id}" class="remove_from_want_to_watch" />Remove</button>
+									</c:when>
+									<c:otherwise>
+										<button id="${movies.id}" class="remove_from_watch" />Remove</button>
+									</c:otherwise>
+								</c:choose>
+							</c:when>
+							<c:otherwise>
+								<button id="${movies.id}" class="add_to_watch" />Add to watched</button>
+								<button id="${movies.id}" class="add_to_want_to_watch" />Add to want to watch</button>
+							</c:otherwise>
+						</c:choose></td>
 					<td align="center"><img
 						src="https://image.tmdb.org/t/p/original${movies.logoPath}"
 						style="width: 150px; height: 200px;" /></td>
@@ -66,24 +86,40 @@
 
 		</table>
 	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"></script>
 
 	<script type="text/javascript"
 		src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(
-				function() {
-					$('.add_to_watch').click(
-							function() {
-								$.ajax({
-									type : "post",
-									url : "add_to_watch",
-									data : "name=" + "movie_name"
-											+ "&year=" + "movie_year"
-								});
-							});
-
+		$(document).ready(function() {
+			$('.add_to_watch').click(function() {
+				$.ajax({
+					type : "post",
+					url : "add_to_watch?id=" + $(this).attr('id')
 				});
+			});
+			$('.remove_from_watch').click(function() {
+				$.ajax({
+					type : "post",
+					url : "remove_from_watch?id=" + $(this).attr('id')
+				});
+				location.reload();
+			});
+			$('.add_to_want_to_watch').click(function() {
+				$.ajax({
+					type : "post",
+					url : "add_to_want_to_watch?id=" + $(this).attr('id')
+				});
+			});
+			$('.remove_from_want_to_watch').click(function() {
+				$.ajax({
+					type : "post",
+					url : "remove_from_want_to_watch?id=" + $(this).attr('id')
+				});
+				location.reload();
+			});
+		});
 	</script>
 
 </body>
